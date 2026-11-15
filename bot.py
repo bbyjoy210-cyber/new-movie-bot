@@ -148,7 +148,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             "✅ I JOINED",
 
-            callback_data=f”check_{code}"
+            callback_data=f"check_{code}"
 
         )]
 
