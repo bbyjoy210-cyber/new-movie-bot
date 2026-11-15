@@ -54,7 +54,7 @@ def save_video(code, file_id):
 
         conn.execute(
 
-            “INSERT INTO videos VALUES (?, ?)",
+            "INSERT INTO videos VALUES (?, ?)",
 
             (code, file_id)
 
