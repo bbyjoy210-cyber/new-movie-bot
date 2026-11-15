@@ -210,11 +210,11 @@ def main():
 
     token = os.getenv("BOT_TOKEN")
 
-    url = os.getenv(“RENDER_EXTERNAL_URL")
+    url = os.getenv("RENDER_EXTERNAL_URL")
 
     if not token or not url:
 
-        raise RuntimeError(“BOT_TOKEN or RENDER_EXTERNAL_URL is missing")
+        raise RuntimeError("BOT_TOKEN or RENDER_EXTERNAL_URL is missing")
 
     init_db()
 
