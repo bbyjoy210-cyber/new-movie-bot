@@ -24,19 +24,19 @@ from telegram.ext import (
 
 ADMIN_ID = 8055105404
 
-BOT_USERNAME = “J3rryMovie2_bot”
+BOT_USERNAME = "J3rryMovie2_bot"
 
 CHANNEL_ID = -1004343817356
 
-CHANNEL_LINK = “https://t.me/+3jDle07iymVjZWU1”
+CHANNEL_LINK = "https://t.me/+3jDle07iymVjZWU1"
 
-DB_NAME = “movies.db”
+DB_NAME = "movies.db"
 
 def init_db():
 
     with sqlite3.connect(DB_NAME) as conn:
 
-        conn.execute(“””
+        conn.execute("""
 
             CREATE TABLE IF NOT EXISTS videos (
 
@@ -46,7 +46,7 @@ def init_db():
 
             )
 
-        “””)
+        """)
 
 def save_video(code, file_id):
 
@@ -54,7 +54,7 @@ def save_video(code, file_id):
 
         conn.execute(
 
-            “INSERT INTO videos VALUES (?, ?)”,
+            “INSERT INTO videos VALUES (?, ?)",
 
             (code, file_id)
 
@@ -66,7 +66,7 @@ def get_video(code):
 
         result = conn.execute(
 
-            “SELECT file_id FROM videos WHERE code = ?”,
+            "SELECT file_id FROM videos WHERE code = ?",
 
             (code,)
 
@@ -86,11 +86,11 @@ async def check_join(user_id, context):
 
         )
 
-        if member.status in (“member”, “administrator”, “creator”):
+        if member.status in ("member", "administrator", "creator"):
 
             return True
 
-        if member.status == “restricted”:
+        if member.status == "restricted":
 
             return member.is_member
 
@@ -98,7 +98,7 @@ async def check_join(user_id, context):
 
     except Exception as error:
 
-        print(“JOIN ERROR:”, repr(error))
+        print("JOIN ERROR:", repr(error))
 
         return False
 
@@ -108,7 +108,7 @@ async def send_movie(message, code):
 
     if not file_id:
 
-        await message.reply_text(“❌ Video not found.”)
+        await message.reply_text("❌ Video not found.")
 
         return
 
@@ -120,7 +120,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await update.message.reply_text(
 
-            “🎬 Welcome!\n\nPlease use a movie link to watch videos.”
+            "🎬 Welcome!\n\nPlease use a movie link to watch videos."
 
         )
 
@@ -138,7 +138,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         [InlineKeyboardButton(
 
-            “📢 JOIN CHANNEL”,
+            "📢 JOIN CHANNEL",
 
             url=CHANNEL_LINK
 
@@ -146,9 +146,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         [InlineKeyboardButton(
 
-            “✅ I JOINED”,
+            "✅ I JOINED",
 
-            callback_data=f”check_{code}”
+            callback_data=f”check_{code}"
 
         )]
 
@@ -156,9 +156,9 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     await update.message.reply_text(
 
-        “🔒 Please join our channel first.\n\n”
+        "🔒 Please join our channel first.\n\n"
 
-        “Join the channel and press I JOINED.”,
+        "Join the channel and press I JOINED.",
 
         reply_markup=InlineKeyboardMarkup(keyboard)
 
@@ -168,11 +168,11 @@ async def check_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     query = update.callback_query
 
-    code = query.data.replace(“check_”, “”, 1)
+    code = query.data.replace("check_", "", 1)
 
     if await check_join(query.from_user.id, context):
 
-        await query.answer(“✅ Join verified!”)
+        await query.answer("✅ Join verified!")
 
         await send_movie(query.message, code)
 
@@ -180,7 +180,7 @@ async def check_button(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         await query.answer(
 
-            “❌ Please join the channel first!”,
+            "❌ Please join the channel first!",
 
             show_alert=True
 
@@ -194,33 +194,33 @@ async def upload_video(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     video = update.message.video
 
-    code = “v_” + uuid.uuid4().hex[:10]
+    code = "v_" + uuid.uuid4().hex[:10]
 
     save_video(code, video.file_id)
 
-    link = f”https://t.me/{BOT_USERNAME}?start={code}”
+    link = f"https://t.me/{BOT_USERNAME}?start={code}"
 
     await update.message.reply_text(
 
-        f”🎬 Video saved!\n\n🔗 Movie Link:\n{link}”
+        f"🎬 Video saved!\n\n🔗 Movie Link:\n{link}"
 
     )
 
 def main():
 
-    token = os.getenv(“BOT_TOKEN”)
+    token = os.getenv("BOT_TOKEN")
 
-    url = os.getenv(“RENDER_EXTERNAL_URL”)
+    url = os.getenv(“RENDER_EXTERNAL_URL")
 
     if not token or not url:
 
-        raise RuntimeError(“BOT_TOKEN or RENDER_EXTERNAL_URL is missing”)
+        raise RuntimeError(“BOT_TOKEN or RENDER_EXTERNAL_URL is missing")
 
     init_db()
 
     app = Application.builder().token(token).build()
 
-    app.add_handler(CommandHandler(“start”, start))
+    app.add_handler(CommandHandler("start", start))
 
     app.add_handler(CallbackQueryHandler(check_button))
 
@@ -228,15 +228,15 @@ def main():
 
     app.run_webhook(
 
-        listen=“0.0.0.0”,
+        listen="0.0.0.0",
 
-        port=int(os.getenv(“PORT”, “10000”)),
+        port=int(os.getenv("PORT", "10000")),
 
-        url_path=“telegram”,
+        url_path="telegram",
 
-        webhook_url=f”{url}/telegram”
+        webhook_url=f"{url}/telegram"
 
     )
 
-if name == “__main__”:
+if name == "__main__":
     main()
