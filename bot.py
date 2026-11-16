@@ -54,12 +54,11 @@ def save_video(code, file_id):
 
         conn.execute(
 
-            "INSERT INTO videos VALUES (?, ?)",
+            "INSERT OR REPLACE INTO videos (code, file_id) VALUES (?, ?)",
 
             (code, file_id)
 
         )
-
 def get_video(code):
 
     with sqlite3.connect(DB_NAME) as conn:
@@ -102,13 +101,29 @@ async def check_join(user_id, context):
 
         return False
 
-async def send_movie(message, code):
+aasync def send_movie(message, code):
 
     file_id = get_video(code)
 
     if not file_id:
 
-        await message.reply_text("❌ Video not found.")
+        await message.reply_text(
+
+            "❌ Video not found. Please contact admin."
+
+        )
+
+        return
+
+    try:
+
+        await message.reply_video(video=file_id)
+
+    except Exception as error:
+
+        print(“VIDEO SEND ERROR:”, repr(error))
+
+        await message.reply_text(“❌ Video sending failed.”)
 
         return
 
@@ -238,5 +253,5 @@ def main():
 
     )
 
-if __name__ == "__main__":
+if name == "main":
     main()
