@@ -119,7 +119,7 @@ async def send_movie(message, code):
 
        print("VIDEO SEND ERROR:", repr(error))
 
-        await message.reply_text(“❌ Video sending failed.”
+        await message.reply_text("❌ Video sending failed."
 
         return
 
