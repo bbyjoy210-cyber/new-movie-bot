@@ -101,7 +101,7 @@ async def check_join(user_id, context):
 
         return False
 
-aasync def send_movie(message, code):
+def send_movie(message, code):
 
     file_id = get_video(code)
 
