@@ -107,7 +107,7 @@ async def send_movie(message, code):
 
     if not file_id:
 
-        await message.reply_text(“❌ Video not found.”)
+        await message.reply_text("❌ Video not found.")
 
         return
 
@@ -117,9 +117,9 @@ async def send_movie(message, code):
 
     except Exception as error:
 
-        print(“VIDEO SEND ERROR:”, repr(error))
+        print("VIDEO SEND ERROR:", repr(error))
 
-        await message.reply_text(“❌ Video sending failed.”)
+        await message.reply_text("❌ Video sending failed.")
 
         return
 
