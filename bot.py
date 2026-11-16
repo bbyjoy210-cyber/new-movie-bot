@@ -101,17 +101,25 @@ async def check_join(user_id, context):
 
         return False
 
-def send_movie(message, code):
+async def send_movie(message, code):
 
     file_id = get_video(code)
 
     if not file_id:
 
-        await message.reply_text(
+        await message.reply_text(“❌ Video not found.”)
 
-            "❌ Video not found. Please contact admin."
+        return
 
-        )
+    try:
+
+        await message.reply_video(video=file_id)
+
+    except Exception as error:
+
+        print(“VIDEO SEND ERROR:”, repr(error))
+
+        await message.reply_text(“❌ Video sending failed.”)
 
         return
 
