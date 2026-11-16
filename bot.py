@@ -121,9 +121,9 @@ aasync def send_movie(message, code):
 
     except Exception as error:
 
-        print(“VIDEO SEND ERROR:”, repr(error))
+        print("VIDEO SEND ERROR:", repr(error))
 
-        await message.reply_text(“❌ Video sending failed.”)
+        await message.reply_text("❌ Video sending failed.")
 
         return
 
